@@ -1,2 +1,2 @@
-# ff-public
+# @ff-public
 Feather Fiance Public Utils

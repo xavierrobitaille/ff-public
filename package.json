@@ -1,0 +1,24 @@
+{
+  "name": "@ff/public",
+  "version": "1.0.0",
+  "description": "Feather Finance Public Utils",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "pnpm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xavierrobitaille/ff-public.git"
+  },
+  "keywords": [
+    "ff",
+    "public",
+    "utils"
+  ],
+  "author": "Xavier Robitaille",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xavierrobitaille/ff-public/issues"
+  },
+  "homepage": "https://github.com/xavierrobitaille/ff-public#readme"
+}

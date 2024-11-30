@@ -4,14 +4,17 @@
   "description": "Feather Finance Public Utils",
   "main": "index.mjs",
   "scripts": {
-    "test": "pnpm test"
+    "test": "echo \"No tests yet?\n\"; pnpm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xavierrobitaille/ff-public.git"
+    "url": "https://github.com/xavierrobitaille/ff-public.git"
   },
   "keywords": [
-    "ff",
+    "FF",
+    "feather finance",
+    "portfolio management software",
+    "PMS",
     "public",
     "utils"
   ],
@@ -20,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/xavierrobitaille/ff-public/issues"
   },
-  "homepage": "https://github.com/xavierrobitaille/ff-public#readme"
+  "homepage": "https://github.com/xavierrobitaille/ff-public#readme",
+  "files": [
+    "index.mjs",
+    "lib/"
+  ]
 }

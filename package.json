@@ -1,6 +1,6 @@
 {
   "name": "ffpublic",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Feather Finance Public Utils",
   "main": "index.cjs",
   "exports": {
@@ -31,6 +31,9 @@
   "homepage": "https://github.com/xavierrobitaille/ff-public#readme",
   "files": [
     "index.mjs",
-    "lib/"
+    "index.js",
+    "index.cjs",
+    "index.d.ts",
+    "README.md"
   ]
 }

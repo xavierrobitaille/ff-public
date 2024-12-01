@@ -80,6 +80,38 @@ function ffCoupon({ amount }, { symbol, isin, coupon }, paymentDate) {
   };
 }
 
+function ffInterest({
+  externalSymbol,
+  symbol,
+  interest,
+  paymentDate,
+  currency,
+  symbolCurrency,
+  description,
+  label,
+  assetType,
+}) {
+  // const date = toEodUtc(paymentDate);
+  const date = paymentDate;
+  return {
+    externalSymbol,
+    transactionDate: date,
+    paymentDate: date,
+    processingDate: date,
+    symbol,
+    symbolCurrency,
+    type: "INTEREST",
+    amount: 0,
+    price: 0,
+    netAmount: interest,
+    currency,
+    description,
+    fees: 0,
+    assetType,
+    label,
+  };
+}
+
 function ffBondRedemption(
   { amount, cost, settlementDate },
   { symbol, isin },
@@ -157,10 +189,11 @@ function ffWireOut({ dateStr, netAmount }) {
 // CommonJS export (using module.exports)
 module.exports = {
   ff,
+  ffBondRedemption,
   ffBondTransaction,
   ffCoupon,
-  ffBondRedemption,
+  ffDividend,
+  ffInterest,
   ffWireIn,
   ffWireOut,
-  ffDividend,
 };

@@ -1,6 +1,3 @@
-function ff() {
-  console.log("ff");
-  return 1;
-}
-
-export { ff as default };
+// index.mjs (ESM entry point)
+import { ff } from "./index.js";
+export { ff };

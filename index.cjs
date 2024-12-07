@@ -6,8 +6,10 @@ const {
   ffCoupon,
   ffDividend,
   ffInterest,
-  ffWireIn,
-  ffWireOut,
+  ffWireInCurrency,
+  ffWireInSymbol,
+  ffWireOutCurrency,
+  toEodUtc,
 } = require("./index.js");
 module.exports = {
   ff,
@@ -16,6 +18,8 @@ module.exports = {
   ffCoupon,
   ffDividend,
   ffInterest,
-  ffWireIn,
-  ffWireOut,
+  ffWireInCurrency,
+  ffWireInSymbol,
+  ffWireOutCurrency,
+  toEodUtc,
 };

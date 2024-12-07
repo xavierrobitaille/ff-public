@@ -136,7 +136,34 @@ function ffBondRedemption(
   };
 }
 
-function ffWireIn({ dateStr, netAmount, currency }) {
+function ffWireInSymbol({
+  dateStr,
+  symbol,
+  amount,
+  currency,
+  assetType = undefined,
+  externalSymbol,
+  paymentDate,
+  interest,
+  description,
+  symbolCurrency,
+  label,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency: currency,
+    type: "WIRE_IN",
+    amount,
+    netAmount: 0,
+    currency,
+    description,
+    assetType,
+  };
+}
+function ffWireInCurrency({ dateStr, netAmount, currency }) {
   const transactionDate = toEodUtc(new Date(dateStr));
   return {
     transactionDate,
@@ -156,7 +183,7 @@ function ffWireIn({ dateStr, netAmount, currency }) {
     // },
   };
 }
-function ffWireOut({ dateStr, netAmount }) {
+function ffWireOutCurrency({ dateStr, netAmount }) {
   const transactionDate = toEodUtc(new Date(dateStr), "999");
   return {
     transactionDate,
@@ -181,8 +208,8 @@ function ffWireOut({ dateStr, netAmount }) {
 //   ffBondTransaction,
 //   ffCoupon,
 //   ffBondRedemption,
-//   ffWireIn,
-//   ffWireOut,
+//   ffWireInCurrency,
+//   ffWireOutCurrency,
 //   ffDividend,
 // };
 
@@ -194,6 +221,8 @@ module.exports = {
   ffCoupon,
   ffDividend,
   ffInterest,
-  ffWireIn,
-  ffWireOut,
+  ffWireInCurrency,
+  ffWireInSymbol,
+  ffWireOutCurrency,
+  toEodUtc,
 };

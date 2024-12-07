@@ -1,6 +1,6 @@
 # @ff/public
 
-Feather Fiance Public Utils
+Feather Finance Public Utils
 
 npm login --auth-type legacy
 xrobitaille Google Authenticator on iPhone

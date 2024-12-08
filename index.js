@@ -60,6 +60,37 @@ function ffBondTransaction({ amount, cost, settlementDate }, { symbol, isin }) {
   };
 }
 
+function ffFuturesTrade({
+  amount,
+  assetType,
+  currency,
+  dateStr,
+  description,
+  instruction,
+  label,
+  price,
+  symbol,
+  symbolCurrency,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency,
+    type: "TRADE",
+    amount,
+    price,
+    label,
+    netAmount: price * amount,
+    currency,
+    description,
+    fees: 0,
+    assetType,
+    instruction,
+  };
+}
+
 function ffCoupon({ amount }, { symbol, isin, coupon }, paymentDate) {
   const date = toEodUtc(paymentDate);
   return {
@@ -163,8 +194,44 @@ function ffWireInSymbol({
     assetType,
   };
 }
-function ffWireInCurrency({ dateStr, netAmount, currency }) {
-  const transactionDate = toEodUtc(new Date(dateStr));
+function ffWireInSymbol({
+  dateStr,
+  symbol,
+  amount,
+  currency,
+  assetType = undefined,
+  externalSymbol,
+  paymentDate,
+  interest,
+  description,
+  symbolCurrency,
+  label,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency: currency,
+    type: "WIRE_IN",
+    amount,
+    netAmount: 0,
+    currency,
+    description,
+    assetType,
+  };
+}
+function ffWireInCurrency(
+  {
+    dateStr,
+    netAmount,
+    currency,
+    description = "Wire-in transaction to fund bond purchase.",
+    label = undefined,
+  },
+  { forceEodUtc = true }
+) {
+  const transactionDate = forceEodUtc ? toEodUtc(new Date(dateStr)) : dateStr;
   return {
     transactionDate,
     settlementDate: transactionDate,
@@ -175,7 +242,8 @@ function ffWireInCurrency({ dateStr, netAmount, currency }) {
     amount: 0,
     netAmount: netAmount.toFixed(2) / 1,
     currency: currency,
-    description: "Wire-in transaction to fund bond purchase.",
+    description,
+    label,
     // description:
     //   "Virtual wire in transaction created by Feather Finance upon initial upload, to represent the initial state of the portfolio.",
     // flags: {
@@ -183,20 +251,31 @@ function ffWireInCurrency({ dateStr, netAmount, currency }) {
     // },
   };
 }
-function ffWireOutCurrency({ dateStr, netAmount }) {
-  const transactionDate = toEodUtc(new Date(dateStr), "999");
+function ffWireOutCurrency(
+  {
+    dateStr,
+    netAmount,
+    currency = "CAD",
+    description = "Wire-out proceeds not to leave uninvested amounts in portfolio.",
+    label = undefined,
+  },
+  { forceEodUtc = true }
+) {
+  const transactionDate = forceEodUtc
+    ? toEodUtc(new Date(dateStr), "999")
+    : dateStr;
   return {
     transactionDate,
     settlementDate: transactionDate,
     processingDate: transactionDate,
     symbol: "",
-    symbolCurrency: "CAD",
+    symbolCurrency: currency,
     type: "WIRE_OUT",
     amount: 0,
     netAmount: netAmount,
-    currency: "CAD",
-    description:
-      "Wire-out proceeds not to leave uninvested amounts in portfolio.",
+    currency,
+    description,
+    label,
     // description:
     //   "Virtual wire in transaction created by Feather Finance upon initial upload, to represent the initial state of the portfolio.",
     // flags: {
@@ -220,6 +299,7 @@ module.exports = {
   ffBondTransaction,
   ffCoupon,
   ffDividend,
+  ffFuturesTrade,
   ffInterest,
   ffWireInCurrency,
   ffWireInSymbol,

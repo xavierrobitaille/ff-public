@@ -60,6 +60,32 @@ function ffBondTransaction({ amount, cost, settlementDate }, { symbol, isin }) {
   };
 }
 
+function ffFee({
+  assetType,
+  currency,
+  dateStr,
+  description,
+  label,
+  netAmount,
+  symbol,
+  symbolCurrency,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency,
+    type: "FEE",
+    amount: 0,
+    netAmount,
+    label,
+    currency,
+    description,
+    assetType,
+  };
+}
+
 function ffFuturesTrade({
   amount,
   assetType,
@@ -112,34 +138,28 @@ function ffCoupon({ amount }, { symbol, isin, coupon }, paymentDate) {
 }
 
 function ffInterest({
-  externalSymbol,
-  symbol,
-  interest,
-  paymentDate,
+  assetType,
   currency,
-  symbolCurrency,
+  dateStr,
   description,
   label,
-  assetType,
+  netAmount,
+  symbol,
+  symbolCurrency,
 }) {
-  // const date = toEodUtc(paymentDate);
-  const date = paymentDate;
   return {
-    externalSymbol,
-    transactionDate: date,
-    paymentDate: date,
-    processingDate: date,
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
     symbol,
     symbolCurrency,
     type: "INTEREST",
     amount: 0,
-    price: 0,
-    netAmount: interest,
+    netAmount,
+    label,
     currency,
     description,
-    fees: 0,
     assetType,
-    label,
   };
 }
 
@@ -299,6 +319,7 @@ module.exports = {
   ffBondTransaction,
   ffCoupon,
   ffDividend,
+  ffFee,
   ffFuturesTrade,
   ffInterest,
   ffWireInCurrency,

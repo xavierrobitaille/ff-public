@@ -17,6 +17,8 @@ function getFfSymbolCurrency(symbol) {
   return "USD";
 }
 
+const defaultCreateOriginal = (row) => JSON.stringify(row);
+
 function ffDividend({ amount }, { symbol, perShare }, paymentDate) {
   const date = `${paymentDate}T23:59:59.000Z`;
   const currency = getFfSymbolCurrency(symbol);
@@ -67,6 +69,7 @@ function ffFee({
   description,
   label,
   netAmount,
+  originalData,
   symbol,
   symbolCurrency,
 }) {
@@ -78,6 +81,7 @@ function ffFee({
     symbolCurrency,
     type: "FEE",
     amount: 0,
+    originalData: defaultCreateOriginal(originalData),
     netAmount,
     label,
     currency,
@@ -94,6 +98,7 @@ function ffFuturesTrade({
   description,
   instruction,
   label,
+  originalData,
   price,
   symbol,
   symbolCurrency,
@@ -106,6 +111,7 @@ function ffFuturesTrade({
     symbolCurrency,
     type: "TRADE",
     amount,
+    originalData: defaultCreateOriginal(originalData),
     price,
     label,
     netAmount: price * amount,
@@ -143,6 +149,7 @@ function ffInterest({
   dateStr,
   description,
   label,
+  originalData,
   netAmount,
   symbol,
   symbolCurrency,
@@ -155,6 +162,7 @@ function ffInterest({
     symbolCurrency,
     type: "INTEREST",
     amount: 0,
+    originalData: defaultCreateOriginal(originalData),
     netAmount,
     label,
     currency,
@@ -188,19 +196,22 @@ function ffBondRedemption(
 }
 
 function ffWireInSymbol({
-  dateStr,
-  symbol,
+  accountName,
   amount,
-  currency,
   assetType = undefined,
-  externalSymbol,
-  paymentDate,
-  interest,
+  currency,
+  dateStr,
   description,
-  symbolCurrency,
+  externalSymbol,
+  interest,
   label,
+  originalData,
+  paymentDate,
+  symbol,
+  symbolCurrency,
 }) {
   return {
+    accountName,
     transactionDate: dateStr,
     settlementDate: dateStr,
     processingDate: dateStr,
@@ -208,39 +219,14 @@ function ffWireInSymbol({
     symbolCurrency: currency,
     type: "WIRE_IN",
     amount,
+    originalData: defaultCreateOriginal(originalData),
     netAmount: 0,
     currency,
     description,
     assetType,
   };
 }
-function ffWireInSymbol({
-  dateStr,
-  symbol,
-  amount,
-  currency,
-  assetType = undefined,
-  externalSymbol,
-  paymentDate,
-  interest,
-  description,
-  symbolCurrency,
-  label,
-}) {
-  return {
-    transactionDate: dateStr,
-    settlementDate: dateStr,
-    processingDate: dateStr,
-    symbol,
-    symbolCurrency: currency,
-    type: "WIRE_IN",
-    amount,
-    netAmount: 0,
-    currency,
-    description,
-    assetType,
-  };
-}
+
 function ffWireInCurrency(
   {
     dateStr,
@@ -248,6 +234,7 @@ function ffWireInCurrency(
     currency,
     description = "Wire-in transaction to fund bond purchase.",
     label = undefined,
+    originalData,
   },
   { forceEodUtc = true }
 ) {
@@ -260,6 +247,7 @@ function ffWireInCurrency(
     symbolCurrency: currency,
     type: "WIRE_IN",
     amount: 0,
+    originalData: defaultCreateOriginal(originalData),
     netAmount: netAmount.toFixed(2) / 1,
     currency: currency,
     description,
@@ -278,6 +266,7 @@ function ffWireOutCurrency(
     currency = "CAD",
     description = "Wire-out proceeds not to leave uninvested amounts in portfolio.",
     label = undefined,
+    originalData,
   },
   { forceEodUtc = true }
 ) {
@@ -292,6 +281,7 @@ function ffWireOutCurrency(
     symbolCurrency: currency,
     type: "WIRE_OUT",
     amount: 0,
+    originalData: defaultCreateOriginal(originalData),
     netAmount: netAmount,
     currency,
     description,

@@ -223,6 +223,7 @@ function ffWireInSymbol({
     netAmount: 0,
     currency,
     description,
+    label,
     assetType,
   };
 }

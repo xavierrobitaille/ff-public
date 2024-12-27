@@ -207,6 +207,7 @@ function ffWireInSymbol({
   label,
   originalData,
   paymentDate,
+  price,
   symbol,
   symbolCurrency,
 }) {
@@ -225,6 +226,7 @@ function ffWireInSymbol({
     description,
     label,
     assetType,
+    price,
   };
 }
 

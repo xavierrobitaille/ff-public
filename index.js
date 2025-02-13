@@ -61,6 +61,33 @@ function ffBondTransaction({ amount, cost, settlementDate }, { symbol, isin }) {
     instruction: "BUY",
   };
 }
+function ffExchange({
+  assetType,
+  currency,
+  dateStr,
+  description,
+  label,
+  amount,
+  originalData,
+  symbol,
+  symbolCurrency,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency,
+    type: "EXCHANGE",
+    amount,
+    originalData: defaultCreateOriginal(originalData),
+    netAmount: 0,
+    label,
+    currency,
+    description,
+    assetType,
+  };
+}
 
 function ffFee({
   assetType,
@@ -83,6 +110,34 @@ function ffFee({
     amount: 0,
     originalData: defaultCreateOriginal(originalData),
     netAmount,
+    label,
+    currency,
+    description,
+    assetType,
+  };
+}
+
+function ffFeeInKind({
+  assetType,
+  currency,
+  dateStr,
+  description,
+  label,
+  amount,
+  originalData,
+  symbol,
+  symbolCurrency,
+}) {
+  return {
+    transactionDate: dateStr,
+    settlementDate: dateStr,
+    processingDate: dateStr,
+    symbol,
+    symbolCurrency,
+    type: "FEE_IN_KIND",
+    amount,
+    originalData: defaultCreateOriginal(originalData),
+    netAmount: 0,
     label,
     currency,
     description,
@@ -239,7 +294,7 @@ function ffWireInCurrency(
     label = undefined,
     originalData,
   },
-  { forceEodUtc = true }
+  { forceEodUtc = false } = { forceEodUtc: false }
 ) {
   const transactionDate = forceEodUtc ? toEodUtc(new Date(dateStr)) : dateStr;
   return {
@@ -271,7 +326,7 @@ function ffWireOutCurrency(
     label = undefined,
     originalData,
   },
-  { forceEodUtc = true }
+  { forceEodUtc = false } = { forceEodUtc: false }
 ) {
   const transactionDate = forceEodUtc
     ? toEodUtc(new Date(dateStr), "999")
@@ -296,14 +351,40 @@ function ffWireOutCurrency(
     // },
   };
 }
-// export {
-//   ffBondTransaction,
-//   ffCoupon,
-//   ffBondRedemption,
-//   ffWireInCurrency,
-//   ffWireOutCurrency,
-//   ffDividend,
-// };
+function ffWireOutSymbol({
+  accountName,
+  amount,
+  assetType = undefined,
+  currency,
+  dateStr,
+  description,
+  externalSymbol,
+  interest,
+  label,
+  originalData,
+  paymentDate,
+  price,
+  symbol,
+  symbolCurrency,
+}) {
+  const wireInSymbol = ffWireInSymbol({
+    accountName,
+    amount,
+    assetType,
+    currency,
+    dateStr,
+    description,
+    externalSymbol,
+    interest,
+    label,
+    originalData,
+    paymentDate,
+    price,
+    symbol,
+    symbolCurrency,
+  });
+  return { ...wireInSymbol, type: "WIRE_OUT" };
+}
 
 // CommonJS export (using module.exports)
 module.exports = {
@@ -312,11 +393,14 @@ module.exports = {
   ffBondTransaction,
   ffCoupon,
   ffDividend,
+  ffExchange,
   ffFee,
+  ffFeeInKind,
   ffFuturesTrade,
   ffInterest,
   ffWireInCurrency,
   ffWireInSymbol,
   ffWireOutCurrency,
+  ffWireOutSymbol,
   toEodUtc,
 };
